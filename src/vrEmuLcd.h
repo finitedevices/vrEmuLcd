@@ -12,20 +12,24 @@
 #ifndef _VR_EMU_LCD_H_
 #define _VR_EMU_LCD_H_
 
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#define VR_EMU_LCD_DLLEXPORT EMSCRIPTEN_KEEPALIVE
-#elif VR_EMU_LCD_COMPILING_DLL
-#define VR_EMU_LCD_DLLEXPORT __declspec(dllexport)
-#elif defined WIN32 && !defined VR_EMU_LCD_STATIC
-#define VR_EMU_LCD_DLLEXPORT __declspec(dllimport)
-#else
-#define VR_EMU_LCD_STATIC 1
+#if __EMSCRIPTEN__
+  #include <emscripten.h>
 #ifdef __cplusplus
-#define VR_EMU_LCD_DLLEXPORT extern "C"
+#define VR_EMU_LCD_DLLEXPORT EMSCRIPTEN_KEEPALIVE extern "C"
 #else
-#define VR_EMU_LCD_DLLEXPORT extern
+#define VR_EMU_LCD_DLLEXPORT EMSCRIPTEN_KEEPALIVE extern
 #endif
+
+#elif VR_EMU_LCD_COMPILING_DLL
+  #define VR_EMU_LCD_DLLEXPORT __declspec(dllexport)
+#elif defined WIN32 && !defined VR_EMU_LCD_STATIC
+  #define VR_EMU_LCD_DLLEXPORT __declspec(dllimport)
+#else
+  #ifdef __cplusplus
+    #define VR_EMU_LCD_DLLEXPORT extern "C"
+  #else
+    #define VR_EMU_LCD_DLLEXPORT extern
+  #endif
 #endif
 
 #include <stdint.h>
